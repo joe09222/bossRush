@@ -1,0 +1,83 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://icon.png" type="Texture" id=1]
+[ext_resource path="res://Bosses/Dragon.gd" type="Script" id=2]
+[ext_resource path="res://Scenes/Systems/Health.tscn" type="PackedScene" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 30.8217, 31.8265 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 198.463, 82.8552 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 491.934, 135.927 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 36.5938, 38.0994 )
+
+[node name="Dragon" type="StaticBody2D"]
+z_index = 9
+collision_layer = 8
+collision_mask = 16
+script = ExtResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="dangerArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="dangerArea"]
+shape = SubResource( 2 )
+
+[node name="spawnSingleWave" type="Timer" parent="."]
+
+[node name="spawnExplosionWave" type="Timer" parent="."]
+
+[node name="EyeArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EyeArea"]
+shape = SubResource( 3 )
+disabled = true
+
+[node name="changeEyeDir" type="Timer" parent="."]
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="Health" parent="." instance=ExtResource( 3 )]
+max_health = 300
+
+[node name="hitbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hitbox"]
+shape = SubResource( 4 )
+
+[node name="getDangerArea" type="Timer" parent="."]
+one_shot = true
+
+[node name="getExplosionsBack" type="Timer" parent="."]
+one_shot = true
+
+[node name="getFallBack" type="Timer" parent="."]
+one_shot = true
+
+[node name="getEyeBack" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="body_entered" from="dangerArea" to="." method="_on_dangerArea_body_entered"]
+[connection signal="timeout" from="spawnSingleWave" to="." method="_on_spawnSingleWave_timeout"]
+[connection signal="timeout" from="spawnExplosionWave" to="." method="_on_spawnExplosionWave_timeout"]
+[connection signal="body_entered" from="EyeArea" to="." method="_on_EyeArea_body_entered"]
+[connection signal="timeout" from="getDangerArea" to="." method="_on_getDangerArea_timeout"]
+[connection signal="timeout" from="getExplosionsBack" to="." method="_on_getExplosionsBack_timeout"]
+[connection signal="timeout" from="getFallBack" to="." method="_on_getFallBack_timeout"]
+[connection signal="timeout" from="getEyeBack" to="." method="_on_getEyeBack_timeout"]
